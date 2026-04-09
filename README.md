@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# WealthPulse AI
 
-## Project info
+WealthPulse AI is a personal finance dashboard for tracking cash flow, investments, liabilities, and AI-assisted financial insights in one place.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Live app: [https://wealthpulse-ai.lovable.app/](https://wealthpulse-ai.lovable.app/)
 
-## How can I edit this code?
+## What it does
 
-There are several ways of editing your application.
+- Tracks income, expenses, assets, and liabilities
+- Imports demo and user financial data
+- Shows portfolio, debt, and cash flow views
+- Uses Supabase for auth, data storage, and edge functions
+- Includes AI-powered financial insights and helper workflows
 
-**Use Lovable**
+## Tech stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Supabase
 
-Changes made via Lovable will be committed automatically to this repo.
+## Local development
 
-**Use your preferred IDE**
+Requirements:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js 18+
+- npm
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Start the app locally:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Build for production:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+npm run build
+```
 
-**Use GitHub Codespaces**
+Run tests:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+npm test
+```
 
-## What technologies are used for this project?
+## Environment variables
 
-This project is built with:
+Create a local `.env` file using `.env.example` as a reference.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Typical variables used by this project:
 
-## How can I deploy this project?
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `VITE_SUPABASE_PROJECT_ID`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Do not commit real secrets or local Supabase metadata to the repository.
 
-## Can I connect a custom domain to my Lovable project?
+## Project structure
 
-Yes, you can!
+- `src/` app UI, hooks, pages, and utilities
+- `supabase/functions/` edge functions
+- `supabase/migrations/` database migrations
+- `demo-data/` sample import files
+- `scripts/` local utility scripts
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Deployment
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+The production app is published through Lovable and available at:
+
+[https://wealthpulse-ai.lovable.app/](https://wealthpulse-ai.lovable.app/)
