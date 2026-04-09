@@ -1,0 +1,25 @@
+project_id = "oaatlzoqtmwqwzmzmvqm"
+
+[functions.stock-price]
+verify_jwt = false
+
+[functions.exchange-rate]
+verify_jwt = false
+
+[functions.financial-insights]
+verify_jwt = false
+
+[functions.notifications]
+verify_jwt = false
+
+[functions.dashboard]
+verify_jwt = false
+
+[functions.investments]
+verify_jwt = false
+
+[functions.cashflow]
+verify_jwt = false
+
+[functions.liabilities]
+verify_jwt = false

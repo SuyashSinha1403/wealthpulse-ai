@@ -1,0 +1,3 @@
+bank_name,amount,interest_rate,start_date,maturity_date,currency
+HDFC Bank,75000,7.10,2025-08-15,2026-08-15,INR
+SBI,75000,7.00,2026-01-10,2027-01-10,INR

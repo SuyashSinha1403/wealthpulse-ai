@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" class="base-dark accent-green">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="WealthPulse" />
+    <link rel="apple-touch-icon" href="/pwa-icon-512.png" />
+    <meta name="theme-color" content="#10b981" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <title>WealthPulse</title>
+    <meta name="description" content="Lovable Generated Project">
+    <meta name="author" content="Lovable" />
+
+    <!-- TODO: Update og:title to match your application name -->
+    
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0f10880f-0d55-4eb0-9072-c3b87be6ad11/id-preview-8141ad8a--b6b875e7-2419-4539-8812-6c304a142cbd.lovable.app-1771813443040.png">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0f10880f-0d55-4eb0-9072-c3b87be6ad11/id-preview-8141ad8a--b6b875e7-2419-4539-8812-6c304a142cbd.lovable.app-1771813443040.png">
+    <meta property="og:title" content="Lovable App">
+  <meta name="twitter:title" content="Lovable App">
+  <meta property="og:description" content="Lovable Generated Project">
+  <meta name="twitter:description" content="Lovable Generated Project">
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      // Apply theme classes immediately to prevent white flash
+      (function() {
+        var validBases = ['light', 'grey', 'dark'];
+        var validAccents = ['green', 'gold'];
+        var base = localStorage.getItem('wp-base-theme');
+        var accent = localStorage.getItem('wp-accent');
+        if (!base || validBases.indexOf(base) === -1) base = 'dark';
+        if (!accent || validAccents.indexOf(accent) === -1) accent = 'green';
+        document.documentElement.classList.add('base-' + base, 'accent-' + accent);
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

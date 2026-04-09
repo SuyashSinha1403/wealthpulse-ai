@@ -1,0 +1,1 @@
+ALTER TABLE public.stocks_metadata ALTER COLUMN sector SET DEFAULT 'Unclassified';

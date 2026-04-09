@@ -1,0 +1,4 @@
+coin,date,quantity,avg_price,wallet,currency
+BTC,2025-05-16,0.00282721,103489.29,Binance,USD
+ETH,2025-08-14,0.05028447,4548.17,Coinbase,USD
+SOL,2026-01-16,1.14592827,144.86,CoinDCX,USD

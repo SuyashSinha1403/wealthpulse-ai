@@ -1,0 +1,3 @@
+liability_type,outstanding_amount,monthly_payment,interest_rate,currency,lender_name,original_loan_amount,loan_tenure_months,loan_start_date,credit_limit,min_payment_percent,notes
+Car Loan,470000,18000,9.2,INR,HDFC Auto Loan,720000,48,2024-07-10,,,Primary car financed in 2024
+Credit Card,38000,9000,36,INR,HDFC Millennia Card,,,,200000,5,Used for monthly spending and paid down regularly
