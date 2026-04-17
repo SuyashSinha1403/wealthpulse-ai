@@ -442,7 +442,6 @@ export type Database = {
           p_fx_rate: number
           p_is_recurring: boolean
           p_payment_method: string
-          p_user_id: string
         }
         Returns: Json
       }
