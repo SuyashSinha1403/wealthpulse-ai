@@ -100,7 +100,6 @@ export function ExpensesSection({ onExpenseChange }: ExpensesSectionProps) {
       }
 
       const { data, error } = await supabase.rpc("create_expense_with_deduction", {
-        p_user_id: user.id,
         p_amount: amount,
         p_category: form.category,
         p_expense_group: form.expense_group,
