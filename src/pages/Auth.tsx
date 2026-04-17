@@ -222,20 +222,13 @@ const Auth = () => {
                       type="button"
                       variant="outline"
                       className="h-12 w-full rounded-2xl border-white/10 bg-white/[0.04] text-white hover:bg-white/[0.08]"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          const result = await lovable.auth.signInWithOAuth("google", {
-                            redirect_uri: `${window.location.origin}/dashboard`,
-                          });
-                          if (result?.error) {
-                            toast.error(result.error.message || "Google sign-in failed");
-                            return;
-                          }
-                          if (result?.redirected) return;
-                          window.location.href = "/dashboard";
-                        } catch (err) {
-                          toast.error(err instanceof Error ? err.message : "Google sign-in failed");
+                      onClick={async () => {
+                        const result = await lovable.auth.signInWithOAuth("google", {
+                          redirect_uri: window.location.origin,
+                        });
+
+                        if (result.error) {
+                          toast.error(result.error.message || "Google sign-in failed");
                         }
                       }}
                     >
