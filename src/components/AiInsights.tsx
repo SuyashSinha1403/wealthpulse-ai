@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL, supabase } from "@/integrations/supabase/client";
 import { Brain, Sparkles, TrendingUp, AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -56,12 +56,41 @@ export const AiInsights = ({ financialData, currency, context = "dashboard" }: A
   const generate = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("financial-insights", {
-        body: { financialData, context },
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        throw sessionError;
+      }
+
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        throw new Error("Please sign in again to generate insights");
+      }
+
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/financial-insights`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ financialData, context, currency }),
       });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      setResult(data as InsightsResult);
+
+      const responseJson = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(responseJson?.error || "Failed to generate insights");
+      }
+
+      if (responseJson?.error) {
+        throw new Error(responseJson.error);
+      }
+
+      setResult(responseJson as InsightsResult);
     } catch (e: any) {
       toast.error(e.message || "Failed to generate insights");
     } finally {
@@ -97,7 +126,6 @@ export const AiInsights = ({ financialData, currency, context = "dashboard" }: A
 
       {result && !loading && (
         <div className="space-y-5">
-          {/* Score + Summary */}
           <div className="flex items-center gap-5">
             <ScoreRing score={result.healthScore} />
             <div className="flex-1 min-w-0">
@@ -106,7 +134,6 @@ export const AiInsights = ({ financialData, currency, context = "dashboard" }: A
             </div>
           </div>
 
-          {/* Insights */}
           {result.insights.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 flex items-center gap-1.5">
@@ -123,7 +150,6 @@ export const AiInsights = ({ financialData, currency, context = "dashboard" }: A
             </div>
           )}
 
-          {/* Recommendations */}
           {result.recommendations.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 flex items-center gap-1.5">
