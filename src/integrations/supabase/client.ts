@@ -5,10 +5,8 @@ import type { Database } from './types';
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-// Pin the frontend runtime to the canonical WealthPulse Supabase project.
-// This avoids old Lovable/local env values from sending the app to a stale backend.
-export const SUPABASE_URL = "https://oaatlzoqtmwqwzmzmvqm.supabase.co";
-export const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_o2wBlBHbG3mIYPkvHSOs0Q_TcszRBRc";
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+export const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
