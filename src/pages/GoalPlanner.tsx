@@ -215,7 +215,7 @@ const GoalPlanner = () => {
     feasibilityLine,
     safetyMessage,
     isLongGoal
-      ? `Because the timeline is longer than five years, use a product mix like ${productPlan.map((item) => `${item.pct}% ${item.name}`).join(", ")}.`
+      ? `Because this is not a short-term parking goal, use a product mix like ${productPlan.map((item) => `${item.pct}% ${item.name}`).join(", ")}.`
       : `${plan.horizon.label} goals should not be treated like trading portfolios. Use a product mix like ${productPlan.map((item) => `${item.pct}% ${item.name}`).join(", ")}.`,
     notes.trim() ? `Your note was considered: ${notes.trim()}` : "No extra constraints were added by you.",
   ];
