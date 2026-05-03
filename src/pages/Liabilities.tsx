@@ -18,6 +18,7 @@ import { AiInsightsSection } from "@/components/AiInsightsSection";
 import { LoanPlanner } from "@/components/LoanPlanner";
 import { LoanAnalytics } from "@/components/LoanAnalytics";
 import { DebtHealthMetrics } from "@/components/DebtHealthMetrics";
+import { PrototypeSyncPanel } from "@/components/PrototypeSyncPanel";
 import { getLoanStatus, isRevolvingCredit, REVOLVING_TYPES } from "@/lib/loanCalculations";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -238,6 +239,18 @@ const Liabilities = () => {
           </Popover>
         </div>
       </div>
+
+      <PrototypeSyncPanel
+        title="Sync loans and credit cards"
+        description="For the prototype, this shows how WealthPulse would pull liability data from lenders and credit bureaus to keep debt plans accurate."
+        actions={[
+          { label: "Sync credit cards", detail: "Outstanding, due date, limit" },
+          { label: "Sync home loan", detail: "EMI, tenure, rate changes" },
+          { label: "Sync education loan", detail: "Moratorium and EMI plan" },
+          { label: "Upload loan statement", detail: "PDF/CSV fallback" },
+        ]}
+        footnote="This is read-only and advisory. WealthPulse does not initiate repayments or change loan terms."
+      />
 
       <ImportLiabilitiesDialog
         open={importOpen}

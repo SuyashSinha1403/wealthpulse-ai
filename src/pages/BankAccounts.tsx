@@ -14,6 +14,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Plus, Pencil, Trash2, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import { AiInsightsSection } from "@/components/AiInsightsSection";
+import { PrototypeSyncPanel } from "@/components/PrototypeSyncPanel";
 
 interface BankAccount {
   id: string; bank_name: string; account_type: string; balance: number; notes: string | null;
@@ -171,6 +172,18 @@ const BankAccounts = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <PrototypeSyncPanel
+        title="Link bank accounts for cash-flow intelligence"
+        description="Show reviewers how WealthPulse can become AI-native: bank balances and UPI/cash-flow signals can sync automatically after read-only consent."
+        actions={[
+          { label: "Sync HDFC Bank", detail: "Salary, savings, FD balances" },
+          { label: "Sync SBI", detail: "Savings and deposits" },
+          { label: "Sync ICICI Bank", detail: "Cards and accounts" },
+          { label: "Upload statement", detail: "PDF/CSV fallback" },
+        ]}
+        footnote="Prototype mode does not connect to real accounts. It demonstrates the consent screen and future integration path."
+      />
 
       <div className="stat-card">
         <p className="text-sm text-muted-foreground">Total Bank Balance ({baseCurrency})</p>

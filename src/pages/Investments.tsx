@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { ImportInvestmentsDialog } from "@/components/ImportInvestmentsDialog";
 import { PortfolioAnalytics } from "@/components/PortfolioAnalytics";
 import { AiInsightsSection } from "@/components/AiInsightsSection";
+import { PrototypeSyncPanel } from "@/components/PrototypeSyncPanel";
 
 
 const MUTUAL_FUND_CLASSES = ["Mutual Funds", "Global Funds"];
@@ -1204,6 +1205,18 @@ const Investments = () => {
           </Dialog>
         </div>
       </div>
+
+      <PrototypeSyncPanel
+        title="Sync investments from your brokers"
+        description="For the prototype, these connectors show how WealthPulse would pull holdings from demat, mutual fund, and bond sources before generating AI recommendations."
+        actions={[
+          { label: "Sync Zerodha", detail: "Stocks, ETFs, mutual funds" },
+          { label: "Sync Groww", detail: "MFs, stocks, FDs" },
+          { label: "Sync bonds", detail: "RBI bonds, SGBs, debt holdings" },
+          { label: "Import CAS", detail: "Mutual fund statement" },
+        ]}
+        footnote="In a real build this would use broker/OAuth or statement imports with read-only consent. In demo mode it only shows the intended product flow."
+      />
 
       {/* Summary cards - Compact */}
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
