@@ -96,7 +96,7 @@ const Index = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(16,185,129,0.16),transparent_52%),linear-gradient(180deg,rgba(3,7,18,0.92),rgba(2,6,23,1))]" />
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(2,6,23,0.68)_0%,rgba(2,6,23,0.42)_42%,rgba(2,6,23,0.90)_78%,rgba(2,6,23,1)_100%)]" />
+      <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(2,6,23,0.82)_0%,rgba(2,6,23,0.58)_38%,rgba(2,6,23,0.94)_70%,rgba(2,6,23,1)_100%)] sm:bg-[linear-gradient(180deg,rgba(2,6,23,0.68)_0%,rgba(2,6,23,0.42)_42%,rgba(2,6,23,0.90)_78%,rgba(2,6,23,1)_100%)]" />
 
       <Suspense fallback={null}>
         <Hero3DScene />
@@ -110,21 +110,21 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="flex flex-1 flex-col items-center justify-center pb-8 pt-12 text-center sm:py-16 lg:py-20">
+        <div className="flex flex-1 flex-col items-center justify-center pb-8 pt-8 text-center sm:py-16 lg:py-20">
           <div className="max-w-4xl space-y-5 sm:space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300 backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-sm">
               <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
               AI investment planner for Bharat
             </div>
 
-            <h1 className="text-[2.75rem] font-bold leading-[0.96] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
+            <h1 className="text-[2.55rem] font-bold leading-[0.98] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
               <span className="block">Know what to do</span>
               <span className="block bg-gradient-to-r from-emerald-200 via-emerald-400 to-teal-200 bg-clip-text text-transparent">
                 with your money
               </span>
             </h1>
 
-            <p className="mx-auto max-w-2xl text-base leading-7 text-slate-200/82 sm:text-lg lg:text-xl lg:leading-8">
+            <p className="mx-auto max-w-2xl text-base leading-7 text-slate-200/88 sm:text-lg lg:text-xl lg:leading-8">
               WealthPulse asks your age, income, expenses, savings, risk comfort, and goal, then turns it into a practical
               monthly investment plan for the next few months to five years.
             </p>
@@ -140,7 +140,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="space-y-4 pb-safe sm:space-y-6">
+        <div className="relative z-10 space-y-3 pb-safe sm:space-y-6">
           <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
             {trustCards.map((card) => (
               <LandingFeatureCard key={card.title} {...card} tone="top" />

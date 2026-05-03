@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Stars } from "@react-three/drei";
 import * as THREE from "three";
@@ -250,7 +250,21 @@ function GlowOrb({ position, color, scale = 1 }: { position: [number, number, nu
 }
 
 /* ── Scene ── */
-function Scene() {
+function useCompactHeroScene() {
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 640px)");
+    const update = () => setIsCompact(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return isCompact;
+}
+
+function Scene({ isCompact }: { isCompact: boolean }) {
   const candles = [
     { pos: [-2.4, 0, 0] as [number, number, number], h: 1.2, bh: 0.6, d: 0 },
     { pos: [-1.7, 0, 0.3] as [number, number, number], h: 1.6, bh: 0.8, d: 1 },
@@ -261,6 +275,8 @@ function Scene() {
     { pos: [1.8, 0, 0.2] as [number, number, number], h: 3.4, bh: 1.6, d: 0.8 },
     { pos: [2.5, 0, -0.3] as [number, number, number], h: 3.8, bh: 1.8, d: 1.8 },
   ];
+  const sceneScale = isCompact ? 0.5 : 1;
+  const scenePosition: [number, number, number] = isCompact ? [0, -1.15, -2.4] : [0, 0, 0];
 
   return (
     <>
@@ -270,6 +286,7 @@ function Scene() {
       <spotLight position={[0, 6, 0]} intensity={0.5} angle={0.5} penumbra={1} color="#6eff9f" />
 
       <Stars radius={100} depth={50} count={1500} factor={2.5} fade speed={0.3} />
+      <group scale={sceneScale} position={scenePosition}>
       <GridPlane />
       <PulseLine />
 
@@ -303,15 +320,21 @@ function Scene() {
       <GlowOrb position={[-1.5, 2.5, 0.5]} color="#10b981" scale={1.2} />
       <GlowOrb position={[2.2, 3, -0.3]} color="#6eff9f" scale={0.8} />
       <GlowOrb position={[0, 1.5, 1.2]} color="#f59e0b" scale={0.6} />
+      </group>
     </>
   );
 }
 
 export function Hero3DScene() {
+  const isCompact = useCompactHeroScene();
+  const camera = isCompact
+    ? { position: [0, 2.3, 9] as [number, number, number], fov: 42 }
+    : { position: [0, 2, 6] as [number, number, number], fov: 50 };
+
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 opacity-45 sm:opacity-60 lg:opacity-75">
-      <Canvas camera={{ position: [0, 2, 6], fov: 50 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
-        <Scene />
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[72vh] overflow-hidden opacity-25 sm:inset-0 sm:h-auto sm:opacity-60 lg:opacity-75">
+      <Canvas camera={camera} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
+        <Scene isCompact={isCompact} />
       </Canvas>
     </div>
   );
