@@ -15,7 +15,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, TrendingUp, RefreshCw, Wifi, WifiOff, ArrowUpDown, ChevronDown, ChevronRight, Upload } from "lucide-react";
+import {
+  BadgeIndianRupee,
+  BriefcaseBusiness,
+  Car,
+  CirclePlus,
+  FolderOpen,
+  Landmark,
+  PiggyBank,
+  Plus,
+  Pencil,
+  Trash2,
+  TrendingUp,
+  RefreshCw,
+  Wifi,
+  WifiOff,
+  ArrowUpDown,
+  ChevronDown,
+  ChevronRight,
+  Upload,
+  UserRound,
+} from "lucide-react";
 import { toast } from "sonner";
 import { ImportInvestmentsDialog } from "@/components/ImportInvestmentsDialog";
 import { PortfolioAnalytics } from "@/components/PortfolioAnalytics";
@@ -908,6 +928,30 @@ const Investments = () => {
     setForm((f) => ({ ...f, asset_class: v, currency: defaultCur }));
   };
 
+  const trackOptions = [
+    { title: "Vehicle", description: "Track your automobile assets", assetClass: "Vehicle", action: "Track", icon: Car },
+    { title: "EPF", description: "Track your retirement balance", assetClass: "EPF", action: "Track", icon: UserRound },
+    { title: "SIF", description: "Specialised Investment Fund", assetClass: "Custom Asset", action: "Track", icon: FolderOpen },
+    { title: "Bonds", description: "Fixed income for your portfolio", assetClass: "Bonds", action: "Track", icon: BadgeIndianRupee },
+    { title: "PPF", description: "Long-term tax-free savings", assetClass: "PPF", action: "Track", icon: PiggyBank },
+    { title: "ESOPs / RSUs", description: "Manage your company equity", assetClass: "ESOPs / RSUs", action: "Track", icon: BriefcaseBusiness },
+    { title: "Fixed Deposits", description: "Secure returns on your savings", assetClass: "Fixed Deposits", action: "Track", icon: Landmark },
+    { title: "Other broker", description: "Track a broker not listed above", assetClass: "Custom Asset", action: "Add", icon: CirclePlus },
+  ];
+
+  const openTrackAsset = (assetClass: string, title: string) => {
+    const defaultCur = DEFAULT_CURRENCY[assetClass] || baseCurrency;
+    setEditing(null);
+    setForm({
+      ...emptyForm,
+      asset_class: assetClass,
+      asset_name: title === "Other broker" ? "" : title,
+      currency: defaultCur,
+      transaction_date: new Date().toISOString().split("T")[0],
+    });
+    setOpen(true);
+  };
+
   const getAssetClassDisplay = (assetClass: string) => {
     switch (assetClass) {
       case "US Stocks":
@@ -1210,13 +1254,44 @@ const Investments = () => {
         title="Sync investments from your brokers"
         description="Choose what you want to sync first. WealthPulse would then ask for the right broker, registrar, or statement source with read-only consent."
         actions={[
-          { label: "Sync demat account", detail: "Equities, ETFs, SGBs", providers: ["Zerodha", "Groww", "Upstox", "Angel One"] },
+          { label: "Sync demat account", detail: "Equities, ETFs, SGBs", providers: ["Zerodha", "Groww", "Upstox", "Angel One", "Other broker"] },
           { label: "Sync mutual funds", detail: "CAS, AMCs, registrar data", providers: ["Consolidated CAS", "CAMS", "KFintech", "Groww"] },
           { label: "Sync bonds", detail: "RBI bonds, SGBs, debt holdings", providers: ["RBI Retail Direct", "GoldenPi", "Wint Wealth", "Manual upload"] },
           { label: "Sync fixed income", detail: "FDs, RDs, NPS, PPF", providers: ["Bank statement", "NPS CRA", "EPFO", "Manual upload"] },
         ]}
         footnote="In a real build this would use broker/OAuth, CAS, or statement imports with read-only consent. In demo mode it only shows the intended product flow."
       />
+
+      <section className="overflow-hidden rounded-2xl border border-border/70 bg-card/70 backdrop-blur-xl">
+        <div className="flex items-center justify-between gap-3 border-b border-border/70 px-4 py-4 sm:px-5">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">Track more investments</h2>
+            <p className="text-sm text-muted-foreground">If your broker or asset is not synced, add it manually and let WealthPulse include it in your plan.</p>
+          </div>
+        </div>
+        <div className="divide-y divide-border/70">
+          {trackOptions.map(({ title, description, assetClass, action, icon: Icon }) => (
+            <button
+              key={title}
+              type="button"
+              onClick={() => openTrackAsset(assetClass, title)}
+              className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-muted/40 sm:px-5"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-400/10">
+                <Icon className="h-5 w-5 text-emerald-300" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-foreground">{title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2 text-sm font-semibold text-foreground">
+                {action}
+                <CirclePlus className="h-5 w-5 text-emerald-300" />
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* Summary cards - Compact */}
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
