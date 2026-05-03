@@ -309,7 +309,7 @@ function Scene() {
 
 export function Hero3DScene() {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="pointer-events-none absolute inset-0 z-0 opacity-45 sm:opacity-60 lg:opacity-75">
       <Canvas camera={{ position: [0, 2, 6], fov: 50 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
         <Scene />
       </Canvas>
