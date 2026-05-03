@@ -83,6 +83,36 @@ const monthlyRequired = (target: number, current: number, months: number, annual
   return (remaining * monthlyRate) / (Math.pow(1 + monthlyRate, months) - 1);
 };
 
+const getProductPlan = (months: number, risk: Risk, safeAllocation: number) => {
+  if (months <= 12) {
+    return [
+      { name: "Savings / sweep FD", role: "Instant-access money", pct: 45 },
+      { name: "Recurring deposit or short FD", role: "Capital protection", pct: 35 },
+      { name: "Liquid fund style bucket", role: "Low-volatility parking", pct: 20 },
+    ];
+  }
+
+  if (months <= 36) {
+    const growthPct = 100 - safeAllocation;
+    return [
+      { name: "FD / RD ladder", role: "Goal safety", pct: Math.round(safeAllocation * 0.45) },
+      { name: "Liquid or ultra-short debt fund", role: "Low-volatility buffer", pct: Math.round(safeAllocation * 0.35) },
+      { name: "Short-duration debt fund", role: "Measured yield", pct: safeAllocation - Math.round(safeAllocation * 0.45) - Math.round(safeAllocation * 0.35) },
+      { name: "Conservative hybrid fund", role: "Controlled growth", pct: growthPct },
+    ];
+  }
+
+  const equityPct = risk === "growth" ? Math.min(45, 100 - safeAllocation) : Math.min(30, 100 - safeAllocation);
+  const goldPct = months >= 60 ? 10 : 5;
+  const debtPct = Math.max(0, 100 - safeAllocation - equityPct - goldPct);
+  return [
+    { name: "FD / liquid emergency bucket", role: "Money you cannot risk", pct: Math.round(safeAllocation * 0.45) },
+    { name: "Debt mutual fund / bonds", role: "Stable compounding", pct: Math.round(safeAllocation * 0.55) + debtPct },
+    { name: "Nifty 50 / broad index fund", role: "Long-term growth", pct: equityPct },
+    { name: "Gold ETF / sovereign gold bond", role: "Diversifier", pct: goldPct },
+  ].filter((item) => item.pct > 0);
+};
+
 const GoalPlanner = () => {
   const [persona, setPersona] = useState<Persona>("salaried");
   const [age, setAge] = useState(24);
@@ -154,6 +184,11 @@ const GoalPlanner = () => {
     };
   }, [age, dependents, expenses, goalAmount, incomeShock, liabilities, risk, salary, savings, stability, timeline]);
 
+  const productPlan = useMemo(
+    () => getProductPlan(timeline, risk, plan.safeAllocation),
+    [plan.safeAllocation, risk, timeline],
+  );
+
   const nextActions = [
     savings < plan.emergencyNeed
       ? `Move ${formatMoney(Math.min(plan.emergencyNeed - savings, plan.monthlySurplus))} first into an emergency bucket.`
@@ -180,8 +215,8 @@ const GoalPlanner = () => {
     feasibilityLine,
     safetyMessage,
     isLongGoal
-      ? "Because the timeline is longer than five years, this is not a short-term parking problem. The plan can use more growth exposure, but it should still be reviewed yearly."
-      : `${plan.horizon.label} goals should not be treated like trading portfolios. The suggested split is ${plan.safeAllocation}% safe bucket and ${plan.growthAllocation}% growth bucket.`,
+      ? `Because the timeline is longer than five years, use a product mix like ${productPlan.map((item) => `${item.pct}% ${item.name}`).join(", ")}.`
+      : `${plan.horizon.label} goals should not be treated like trading portfolios. Use a product mix like ${productPlan.map((item) => `${item.pct}% ${item.name}`).join(", ")}.`,
     notes.trim() ? `Your note was considered: ${notes.trim()}` : "No extra constraints were added by you.",
   ];
 
@@ -408,6 +443,41 @@ const GoalPlanner = () => {
                   <p className="mt-2 text-3xl font-bold">{plan.growthAllocation}%</p>
                   <p className="mt-2 text-sm text-muted-foreground">{formatMoney(plan.monthlyGrowth)} monthly</p>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden border-primary/20">
+            <CardHeader className="border-b border-border/70 bg-muted/20">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Target className="h-5 w-5 text-primary" />
+                Where should the monthly money go?
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Prototype allocation only. It maps your timeline and risk comfort into common India-friendly buckets.
+              </p>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="divide-y divide-border/70">
+                {productPlan.map((item) => {
+                  const monthlyAmount = plan.requiredMonthly * (item.pct / 100);
+                  return (
+                    <div key={item.name} className="grid gap-3 p-4 md:grid-cols-[1fr_120px_150px] md:items-center">
+                      <div>
+                        <p className="font-semibold text-foreground">{item.name}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{item.role}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">Allocation</p>
+                        <p className="text-lg font-bold text-foreground">{item.pct}%</p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">Monthly</p>
+                        <p className="text-lg font-bold text-primary">{formatMoney(monthlyAmount)}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
