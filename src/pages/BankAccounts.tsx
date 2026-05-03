@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, Building2 } from "lucide-react";
+import { Building2, CirclePlus, Landmark, Pencil, PiggyBank, Plus, Trash2, Wallet, WalletCards } from "lucide-react";
 import { toast } from "sonner";
 import { AiInsightsSection } from "@/components/AiInsightsSection";
 import { PrototypeSyncPanel } from "@/components/PrototypeSyncPanel";
@@ -21,7 +21,7 @@ interface BankAccount {
   currency: string; fx_rate: number | null; base_currency_value: number;
 }
 
-const ACCOUNT_TYPES = ["Savings", "Current", "Salary", "Fixed Deposit", "NRI", "Other"];
+const ACCOUNT_TYPES = ["Savings", "Current", "Salary", "Fixed Deposit", "Recurring Deposit", "NRI", "Wallet", "Cash", "Other"];
 
 const BankAccounts = () => {
   const { user, loading } = useAuth();
@@ -121,6 +121,28 @@ const BankAccounts = () => {
     setOpen(true);
   };
 
+  const trackOptions = [
+    { title: "Savings account", description: "Track balances from banks not connected yet", bankName: "", accountType: "Savings", action: "Track", icon: Landmark },
+    { title: "Salary account", description: "Track monthly salary inflow and balance", bankName: "", accountType: "Salary", action: "Track", icon: Building2 },
+    { title: "Fixed Deposit", description: "Track principal, maturity value, and liquidity", bankName: "", accountType: "Fixed Deposit", action: "Track", icon: PiggyBank },
+    { title: "Recurring Deposit", description: "Track monthly deposits and target maturity", bankName: "", accountType: "Recurring Deposit", action: "Track", icon: WalletCards },
+    { title: "UPI / wallet", description: "Track Paytm, PhonePe, GPay, or prepaid wallet balance", bankName: "", accountType: "Wallet", action: "Track", icon: Wallet },
+    { title: "Cash", description: "Track cash kept outside bank accounts", bankName: "Cash", accountType: "Cash", action: "Add", icon: CirclePlus },
+    { title: "Other bank", description: "Track a bank not listed in sync providers", bankName: "", accountType: "Other", action: "Add", icon: CirclePlus },
+  ];
+
+  const openTrackAccount = (bankName: string, accountType: string) => {
+    setEditing(null);
+    setForm({
+      bank_name: bankName,
+      account_type: accountType,
+      balance: "",
+      notes: "",
+      currency: baseCurrency,
+    });
+    setOpen(true);
+  };
+
   const total = accounts.reduce((s, a) => {
     if (a.currency === baseCurrency) return s + Number(a.balance);
     const rate = getRate(a.currency, baseCurrency);
@@ -175,15 +197,46 @@ const BankAccounts = () => {
 
       <PrototypeSyncPanel
         title="Link bank accounts for cash-flow intelligence"
-        description="Show reviewers how WealthPulse can become AI-native: bank balances and UPI/cash-flow signals can sync automatically after read-only consent."
+        description="Choose the account type first, then select your bank or upload a statement. Unsupported banks can still be tracked manually."
         actions={[
-          { label: "Sync HDFC Bank", detail: "Salary, savings, FD balances" },
-          { label: "Sync SBI", detail: "Savings and deposits" },
-          { label: "Sync ICICI Bank", detail: "Cards and accounts" },
-          { label: "Upload statement", detail: "PDF/CSV fallback" },
+          { label: "Sync bank account", detail: "Savings, salary, current", providers: ["HDFC Bank", "SBI", "ICICI Bank", "Axis Bank", "Other bank"] },
+          { label: "Sync deposits", detail: "FD, RD, sweep balances", providers: ["HDFC Bank", "SBI", "ICICI Bank", "Bank statement"] },
+          { label: "Sync UPI / wallet", detail: "Wallet and UPI cash-flow signals", providers: ["Paytm", "PhonePe", "Google Pay", "Manual upload"] },
+          { label: "Upload statement", detail: "PDF/CSV fallback", providers: ["Bank PDF", "Bank CSV", "Account aggregator export", "Manual entry"] },
         ]}
         footnote="Prototype mode does not connect to real accounts. It demonstrates the consent screen and future integration path."
       />
+
+      <section className="overflow-hidden rounded-2xl border border-border/70 bg-card/70 backdrop-blur-xl">
+        <div className="flex items-center justify-between gap-3 border-b border-border/70 px-4 py-4 sm:px-5">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">Track more accounts</h2>
+            <p className="text-sm text-muted-foreground">If your bank or wallet is not synced, add it manually so WealthPulse can include it in cash-flow planning.</p>
+          </div>
+        </div>
+        <div className="divide-y divide-border/70">
+          {trackOptions.map(({ title, description, bankName, accountType, action, icon: Icon }) => (
+            <button
+              key={title}
+              type="button"
+              onClick={() => openTrackAccount(bankName, accountType)}
+              className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-muted/40 sm:px-5"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-400/10">
+                <Icon className="h-5 w-5 text-emerald-300" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-foreground">{title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2 text-sm font-semibold text-foreground">
+                {action}
+                <CirclePlus className="h-5 w-5 text-emerald-300" />
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="stat-card">
         <p className="text-sm text-muted-foreground">Total Bank Balance ({baseCurrency})</p>
