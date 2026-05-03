@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, TrendingUp, Building2, AlertTriangle,
-  Settings, LogOut, ArrowDownUp,
+  Settings, LogOut, ArrowDownUp, Target,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { BrandMark } from "@/components/BrandMark";
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 
 const mainNav = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Goal Planner", url: "/goal-planner", icon: Target },
   { title: "Investments", url: "/investments", icon: TrendingUp },
   { title: "Cash Flow", url: "/cash-flow", icon: ArrowDownUp },
   { title: "Bank Accounts", url: "/bank-accounts", icon: Building2 },
@@ -29,7 +30,7 @@ export function AppSidebar() {
       <div className="px-4 pb-4 pt-5">
         <BrandMark subtitle="Clarity. Control. Decisions." />
         <div className="mt-4 rounded-[1.4rem] border border-sidebar-border/70 bg-sidebar-accent/55 p-4">
-          <p className="text-sm font-medium text-sidebar-foreground">See everything clearly. Act with confidence.</p>
+          <p className="text-sm font-medium text-sidebar-foreground">Plan upcoming goals before choosing products.</p>
         </div>
       </div>
       <SidebarContent>

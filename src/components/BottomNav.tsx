@@ -1,9 +1,9 @@
 import { NavLink } from "@/components/NavLink";
-import { LayoutDashboard, TrendingUp, ArrowDownUp, AlertTriangle, Building2 } from "lucide-react";
+import { LayoutDashboard, Target, ArrowDownUp, AlertTriangle, Building2 } from "lucide-react";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Investments", url: "/investments", icon: TrendingUp },
+  { title: "Plan", url: "/goal-planner", icon: Target },
   { title: "Cash Flow", url: "/cash-flow", icon: ArrowDownUp },
   { title: "Liabilities", url: "/liabilities", icon: AlertTriangle },
   { title: "Accounts", url: "/bank-accounts", icon: Building2 },

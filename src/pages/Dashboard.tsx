@@ -15,8 +15,11 @@ import {
   AlertTriangle,
   Banknote,
   HeartPulse,
+  Target,
+  ArrowRight,
 } from "lucide-react";
 import { AiInsights } from "@/components/AiInsights";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
   PieChart,
@@ -580,14 +583,19 @@ const Dashboard = () => {
       <div className="brand-panel rounded-[1.8rem] p-5 sm:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
-            <div className="brand-kicker">Your money, in one view</div>
+            <div className="brand-kicker">AI money coach for upcoming goals</div>
             <div>
-              <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white sm:text-4xl">Your financial command center</h1>
+              <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white sm:text-4xl">Plan before you invest</h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-400">
-                Track your net worth, cash flow, and investments — and see what needs your attention today.
+                WealthPulse reads your cash flow, savings, liabilities, and goals to help you decide what money should stay safe and what can grow.
               </p>
             </div>
           </div>
+          <Button onClick={() => navigate("/goal-planner")} className="w-full gap-2 sm:w-auto">
+            <Target className="h-4 w-4" />
+            Build goal plan
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 

@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Index from "./pages/Index";
+import GoalPlanner from "./pages/GoalPlanner";
 
 import Investments from "./pages/Investments";
 import Expenses from "./pages/Expenses";
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
+              <Route path="/goal-planner" element={<AppLayout><GoalPlanner /></AppLayout>} />
               <Route path="/investments" element={<AppLayout><Investments /></AppLayout>} />
               <Route path="/cash-flow" element={<AppLayout><CashFlow /></AppLayout>} />
               <Route path="/expenses" element={<Navigate to="/cash-flow" replace />} />

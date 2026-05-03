@@ -78,13 +78,14 @@ Respond in this exact JSON format (no markdown, no code blocks, just raw JSON):
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "openai/gpt-oss-20b",
         messages: [
           { role: "system", content: "You are a concise financial analyst. Always respond with valid JSON only, no markdown formatting." },
           { role: "user", content: prompt },
         ],
         temperature: 0.3,
         max_tokens: 1024,
+        response_format: { type: "json_object" },
       }),
     });
 
@@ -104,7 +105,10 @@ Respond in this exact JSON format (no markdown, no code blocks, just raw JSON):
     
     let parsed;
     try {
-      const jsonStr = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      const start = cleaned.indexOf("{");
+      const end = cleaned.lastIndexOf("}");
+      const jsonStr = start >= 0 && end > start ? cleaned.slice(start, end + 1) : cleaned;
       parsed = JSON.parse(jsonStr);
     } catch {
       parsed = { healthScore: 0, summary: content, insights: [], recommendations: [] };
