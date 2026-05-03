@@ -101,7 +101,7 @@ const Auth = () => {
                 </h2>
                 <p className="mx-auto max-w-[560px] text-base leading-7 text-slate-300 sm:text-lg sm:leading-8 lg:mx-0">
                   WealthPulse helps Indians decide how much to invest monthly, what should stay safe, and what can grow for
-                  short and intermediate-term goals.
+                  short, intermediate, and long-term goals.
                 </p>
               </div>
 

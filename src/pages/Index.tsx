@@ -126,7 +126,7 @@ const Index = () => {
 
             <p className="mx-auto max-w-2xl text-base leading-7 text-slate-200/88 sm:text-lg lg:text-xl lg:leading-8">
               WealthPulse asks your age, income, expenses, savings, risk comfort, and goal, then turns it into a practical
-              monthly plan for short and intermediate-term investments.
+              monthly plan for short, intermediate, and long-term investments.
             </p>
 
             <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center sm:gap-4">
