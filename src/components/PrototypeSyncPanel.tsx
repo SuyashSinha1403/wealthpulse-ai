@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ArrowRight, CheckCircle2, Lock, PlugZap, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 interface PrototypeSyncAction {
   label: string;
   detail: string;
+  providers?: string[];
 }
 
 interface PrototypeSyncPanelProps {
@@ -15,10 +17,23 @@ interface PrototypeSyncPanelProps {
 }
 
 export function PrototypeSyncPanel({ title, description, actions, footnote }: PrototypeSyncPanelProps) {
-  const handleSync = (label: string) => {
-    toast.success(`${label} sync simulated`, {
-      description: "Prototype mode: this shows the intended consent-based connection flow.",
+  const [selectedAction, setSelectedAction] = useState<PrototypeSyncAction | null>(null);
+
+  const handleSync = (label: string, provider?: string) => {
+    const prefix = provider ? `${provider} ${label}` : label;
+    toast.success(`${prefix} sync simulated`, {
+      description: provider
+        ? `Prototype mode: ${provider} would open a read-only consent flow.`
+        : "Prototype mode: this shows the intended consent-based connection flow.",
     });
+  };
+
+  const handleAction = (action: PrototypeSyncAction) => {
+    if (action.providers?.length) {
+      setSelectedAction(action);
+      return;
+    }
+    handleSync(action.label);
   };
 
   return (
@@ -41,7 +56,7 @@ export function PrototypeSyncPanel({ title, description, actions, footnote }: Pr
               type="button"
               variant="outline"
               className="h-auto justify-between gap-3 rounded-xl border-emerald-400/20 bg-background/45 px-3 py-3 text-left hover:bg-emerald-400/10"
-              onClick={() => handleSync(action.label)}
+              onClick={() => handleAction(action)}
             >
               <span className="min-w-0">
                 <span className="block text-sm font-semibold text-foreground">{action.label}</span>
@@ -52,6 +67,33 @@ export function PrototypeSyncPanel({ title, description, actions, footnote }: Pr
           ))}
         </div>
       </div>
+      {selectedAction?.providers?.length ? (
+        <div className="mt-4 rounded-2xl border border-white/10 bg-background/35 p-3">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-foreground">{selectedAction.label}</p>
+              <p className="text-xs text-muted-foreground">Choose provider to continue read-only sync</p>
+            </div>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setSelectedAction(null)}>
+              Close
+            </Button>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {selectedAction.providers.map((provider) => (
+              <Button
+                key={provider}
+                type="button"
+                variant="outline"
+                className="justify-between rounded-xl border-white/10 bg-background/40"
+                onClick={() => handleSync(selectedAction.label, provider)}
+              >
+                {provider}
+                <ArrowRight className="h-4 w-4 text-emerald-300" />
+              </Button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <div className="mt-4 grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />

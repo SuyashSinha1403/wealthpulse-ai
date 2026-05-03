@@ -1208,14 +1208,14 @@ const Investments = () => {
 
       <PrototypeSyncPanel
         title="Sync investments from your brokers"
-        description="For the prototype, these connectors show how WealthPulse would pull holdings from demat, mutual fund, and bond sources before generating AI recommendations."
+        description="Choose what you want to sync first. WealthPulse would then ask for the right broker, registrar, or statement source with read-only consent."
         actions={[
-          { label: "Sync Zerodha", detail: "Stocks, ETFs, mutual funds" },
-          { label: "Sync Groww", detail: "MFs, stocks, FDs" },
-          { label: "Sync bonds", detail: "RBI bonds, SGBs, debt holdings" },
-          { label: "Import CAS", detail: "Mutual fund statement" },
+          { label: "Sync demat account", detail: "Equities, ETFs, SGBs", providers: ["Zerodha", "Groww", "Upstox", "Angel One"] },
+          { label: "Sync mutual funds", detail: "CAS, AMCs, registrar data", providers: ["Consolidated CAS", "CAMS", "KFintech", "Groww"] },
+          { label: "Sync bonds", detail: "RBI bonds, SGBs, debt holdings", providers: ["RBI Retail Direct", "GoldenPi", "Wint Wealth", "Manual upload"] },
+          { label: "Sync fixed income", detail: "FDs, RDs, NPS, PPF", providers: ["Bank statement", "NPS CRA", "EPFO", "Manual upload"] },
         ]}
-        footnote="In a real build this would use broker/OAuth or statement imports with read-only consent. In demo mode it only shows the intended product flow."
+        footnote="In a real build this would use broker/OAuth, CAS, or statement imports with read-only consent. In demo mode it only shows the intended product flow."
       />
 
       {/* Summary cards - Compact */}
