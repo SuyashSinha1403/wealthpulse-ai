@@ -6,6 +6,7 @@ import {
   CalendarClock,
   CheckCircle2,
   CircleAlert,
+  FileText,
   Info,
   LineChart,
   ShieldCheck,
@@ -98,6 +99,7 @@ const GoalPlanner = () => {
   const [notes, setNotes] = useState("I want a plan that feels safe and does not disturb monthly expenses.");
   const [incomeShock, setIncomeShock] = useState(0);
   const [expenseShock, setExpenseShock] = useState(0);
+  const [answerGenerated, setAnswerGenerated] = useState(false);
 
   const plan = useMemo(() => {
     const horizon = getHorizon(timeline);
@@ -162,6 +164,34 @@ const GoalPlanner = () => {
       : "Split the plan into a safe bucket and a controlled growth bucket.",
   ];
 
+  const goalYears = Math.max(timeline / 12, 0.1);
+  const isLongGoal = timeline > 60;
+  const feasibilityLine =
+    plan.requiredMonthly <= plan.monthlySurplus * 0.45
+      ? "This goal looks achievable without putting too much pressure on monthly cash flow."
+      : plan.requiredMonthly <= plan.monthlySurplus * 0.75
+        ? "This goal is possible, but it will need discipline because it uses a large part of monthly surplus."
+        : "This goal needs adjustment: either increase the timeline, reduce the target, or add more upfront savings.";
+  const safetyMessage = savings < plan.emergencyNeed
+    ? `Before investing aggressively, build your emergency fund toward ${formatMoney(plan.emergencyNeed)}. You currently have ${formatMoney(savings)}.`
+    : "Your emergency fund is reasonably covered, so the plan can allow a controlled growth bucket.";
+  const generatedAnswer = [
+    `For your goal "${goalName}" of ${formatMoney(goalAmount)} in ${goalYears.toFixed(goalYears >= 10 ? 0 : 1)} years, WealthPulse estimates you need about ${formatMoney(plan.requiredMonthly)} per month.`,
+    feasibilityLine,
+    safetyMessage,
+    isLongGoal
+      ? "Because the timeline is longer than five years, this is not a short-term parking problem. The plan can use more growth exposure, but it should still be reviewed yearly."
+      : `${plan.horizon.label} goals should not be treated like trading portfolios. The suggested split is ${plan.safeAllocation}% safe bucket and ${plan.growthAllocation}% growth bucket.`,
+    notes.trim() ? `Your note was considered: ${notes.trim()}` : "No extra constraints were added by you.",
+  ];
+
+  const generateAnswer = () => {
+    setAnswerGenerated(true);
+    requestAnimationFrame(() => {
+      document.getElementById("planner-answer")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 pb-24">
       <section className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
@@ -176,11 +206,16 @@ const GoalPlanner = () => {
             </span>
           </div>
           <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Turn salary, expenses, and goals into a practical investment plan.
+            Ask what to do with your money before picking products.
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-            WealthPulse asks the context a human advisor would ask first, then suggests a plan for money you need in the next few months to five years.
+            Fill your profile and goal, then generate a plain-English answer with monthly action, safety check, and next steps.
           </p>
+          <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+            <div className="rounded-lg border border-border/70 bg-background/40 p-3">1. Add income, expenses, savings, and risk.</div>
+            <div className="rounded-lg border border-border/70 bg-background/40 p-3">2. Ask your goal question.</div>
+            <div className="rounded-lg border border-border/70 bg-background/40 p-3">3. Generate an answer and action plan.</div>
+          </div>
         </div>
 
         <Card className="border-primary/20 bg-primary/8">
@@ -206,8 +241,11 @@ const GoalPlanner = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <UserRound className="h-5 w-5 text-primary" />
-                Prior Information
+                Step 1: Your Money Profile
               </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                These details decide affordability, emergency cushion, and how much risk is sensible.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
@@ -280,8 +318,11 @@ const GoalPlanner = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Target className="h-5 w-5 text-primary" />
-                Goal
+                Step 2: Your Goal Question
               </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Write the goal exactly like you would ask a financial coach.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
@@ -299,14 +340,50 @@ const GoalPlanner = () => {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label>Anything the AI should know?</Label>
+                <Label>Ask WealthPulse</Label>
                 <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} />
               </div>
+              <Button onClick={generateAnswer} className="gap-2">
+                <Sparkles className="h-4 w-4" />
+                Generate answer
+                <ArrowRight className="h-4 w-4" />
+              </Button>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6">
+          <Card id="planner-answer" className="border-primary/25 bg-primary/8">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <FileText className="h-5 w-5 text-primary" />
+                Step 3: WealthPulse Answer
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {!answerGenerated ? (
+                <div className="rounded-lg border border-dashed border-border/80 bg-background/40 p-5 text-sm text-muted-foreground">
+                  Fill the left side and click <span className="font-semibold text-foreground">Generate answer</span>. The text you type in “Ask WealthPulse” will be answered here.
+                </div>
+              ) : (
+                <>
+                  <div className="rounded-lg border border-border/70 bg-background/45 p-4">
+                    <p className="text-sm font-semibold text-foreground">Short answer</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{generatedAnswer[0]}</p>
+                  </div>
+                  <div className="space-y-3">
+                    {generatedAnswer.slice(1).map((line) => (
+                      <div key={line} className="flex gap-3 rounded-lg border border-border/60 bg-background/35 p-3">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <p className="text-sm leading-6 text-muted-foreground">{line}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
           <Card className="overflow-hidden">
             <CardHeader className="border-b border-border/70 bg-muted/20">
               <CardTitle className="flex items-center gap-2 text-lg">
@@ -450,8 +527,8 @@ const GoalPlanner = () => {
                   Connect real cash-flow signals from bank and UPI notifications to update this plan automatically every month.
                 </p>
               </div>
-              <Button className="gap-2">
-                Review plan
+              <Button onClick={generateAnswer} className="gap-2">
+                Generate answer
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </CardContent>
