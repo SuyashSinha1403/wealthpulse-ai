@@ -1,4 +1,4 @@
-import { ArrowRight, BarChart3, CandlestickChart, Landmark, ShieldCheck, Sparkles, Target, TrendingUp } from "lucide-react";
+import { ArrowRight, CandlestickChart, Landmark, PlugZap, ShieldCheck, Sparkles, Target, TrendingUp, WalletCards } from "lucide-react";
 import { Suspense, lazy } from "react";
 import type { ComponentType } from "react";
 import { Link, Navigate } from "react-router-dom";
@@ -9,26 +9,26 @@ import { cn } from "@/lib/utils";
 const Hero3DScene = lazy(() => import("@/components/Hero3DScene").then((m) => ({ default: m.Hero3DScene })));
 
 const trustCards = [
-  { title: "Security", description: "Bank-grade", icon: ShieldCheck },
-  { title: "Privacy", description: "Never sold", icon: BarChart3 },
-  { title: "Goal-first", description: "No guessing", icon: Target },
+  { title: "Read-only sync", description: "No money movement", icon: ShieldCheck },
+  { title: "Built for Bharat", description: "FDs, EPF, PPF, bonds", icon: Landmark },
+  { title: "Goal-first AI", description: "Plan before products", icon: Target },
 ];
 
 const capabilities = [
   {
     icon: CandlestickChart,
-    title: "Plan short and medium-term goals",
-    description: "Turn salary, expenses, savings, risk, and timeline into a monthly action plan.",
+    title: "Ask context before advice",
+    description: "Uses age, income, expenses, savings, liabilities, dependents, timeline, and risk comfort.",
   },
   {
-    icon: Landmark,
-    title: "Know the exact money split",
-    description: "See what should stay in safer buckets and what can go into growth buckets.",
+    icon: WalletCards,
+    title: "Show exact monthly buckets",
+    description: "Breaks money into safety, liquidity, and growth buckets instead of vague investment tips.",
   },
   {
-    icon: TrendingUp,
-    title: "Adjust when life changes",
-    description: "Use cash-flow signals and AI nudges to keep the plan realistic month after month.",
+    icon: PlugZap,
+    title: "Sync or track anything",
+    description: "Connect brokers and banks, or manually track EPF, PPF, bonds, FDs, ESOPs, cash, and wallets.",
   },
 ];
 
